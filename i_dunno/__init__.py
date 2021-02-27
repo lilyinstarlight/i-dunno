@@ -1,4 +1,8 @@
-#!/usr/bin/env python3
+"""
+An RFC 8771-compliant implementation of the Internationalized Deliberately Unreadable Network Notation (shortened as I-DUNNO)
+"""
+
+
 import collections
 import functools
 import ipaddress
@@ -192,7 +196,8 @@ def confusion_check(bytestr, level, levels, constraints):
 
 def encode(addr, level='satisfactory'):
     """
-    Encode an ipaddress.IPv6Address or an ipaddress.IPv4Address object into a random, valid I-DUNNO representation at the given confusion level
+    Encode an ipaddress.IPv6Address or an ipaddress.IPv4Address object into a random, valid I-DUNNO representation at the given confusion level.
+    A ValueError is raised if valid I-DUNNO for the given arguments does not exist.
 
     The output of this function MAY be presented to humans, as recommended by RFC8771.
     """
@@ -213,7 +218,8 @@ def encode(addr, level='satisfactory'):
 
 def decode(i_dunno):
     """
-    Decode an I-DUNNO representation into an ipaddress.IPv6Address or an ipaddress.IPv4Address object
+    Decode an I-DUNNO representation into an ipaddress.IPv6Address or an ipaddress.IPv4Address object.
+    A ValueError is raised if decoding fails due to invalid notation or resulting IP address is invalid.
 
     The output of this function SHOULD NOT be presented to humans, as recommended by RFC8771.
     """
