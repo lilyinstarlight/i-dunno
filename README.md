@@ -17,6 +17,6 @@ import i_dunno
 
 
 addr = ipaddress.ip_address('198.51.100.164')
-addr_i_dunno = i_dunno.encode(addr)
+addr_i_dunno = i_dunno.encode(addr, level='satisfactory')
 addr_obj = i_dunno.decode(addr_i_dunno)
 ```
