@@ -208,7 +208,7 @@ def encode(addr, level='satisfactory'):
         if confusion_check(bytestr, level, confusion_levels, confusion_constraints):
             return bytestr
 
-    return None
+    raise ValueError(f'could not represent given address "{addr}" as valid I-DUNNO at confusion level "{level}"')
 
 
 def decode(i_dunno):

@@ -12,13 +12,12 @@ def main():
 
     args = argparser.parse_args()
 
-    i_dunno = encode(args.addr, args.level)
-    if i_dunno is not None:
-        sys.stdout.buffer.write(i_dunno)
+    try:
+        sys.stdout.buffer.write(encode(args.addr, args.level))
         if sys.stdout.isatty():
             sys.stdout.buffer.write(b'\n')
-    else:
-        print(f'Could not represent given address "{args.addr}" as valid I-DUNNO at confusion level "{args.level}"', file=sys.stderr)
+    except ValueError as err:
+        print(f'Error: {err}', file=sys.stderr)
         sys.exit(1)
 
 
