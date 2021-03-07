@@ -124,7 +124,7 @@ def encode(addr, level='satisfactory'):
 
     bits = bytes_to_bits(addr.packed)
 
-    bytestrs = list(packed_combinations(tuple(bits), tuple(utf8_lengths)))
+    bytestrs = packed_combinations(tuple(bits), tuple(utf8_lengths))
     random.shuffle(bytestrs)
 
     for bytestr in bytestrs:
