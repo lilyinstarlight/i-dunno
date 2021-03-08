@@ -15,7 +15,7 @@ from . import data
 __all__ = ['encode', 'decode']
 
 
-__version__ = '0.1.1'
+__version__ = '0.1.2'
 
 
 utf8_lengths = [(0, 7), (8, 11), (12, 16), (17, 21)]
