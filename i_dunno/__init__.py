@@ -24,7 +24,7 @@ utf8_lengths = [(0, 7), (8, 11), (12, 16), (17, 21)]
 confusion_constraints = {
     'multi-octet': lambda bytestr: any(num >= 0b11000000 for num in bytestr),
     'disallowed': lambda bytestr: any(char in data.idna_disallowed for char in bytestr.decode('utf-8')),
-    'non-printable': lambda bytestr: not any(char.isprintable() for char in bytestr.decode('utf-8')),
+    'non-printable': lambda bytestr: any(not char.isprintable() for char in bytestr.decode('utf-8')),
     'multiple-scripts': lambda bytestr: len({data.character_script(char) for char in bytestr.decode('utf-8')}) > 1,
     'category-symbol': lambda bytestr: any(char in data.category_symbols for char in bytestr.decode('utf-8')),
     'multiple-directionalities': lambda bytestr: len({data.character_bidi(char) for char in bytestr.decode('utf-8')}) > 1,
