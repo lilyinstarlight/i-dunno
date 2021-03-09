@@ -151,7 +151,7 @@ def decode(i_dunno):
                 bits += int_to_bits(num, length)
                 break
         else:
-            raise ValueError('invalid I-DUNNO notation')
+            raise ValueError('invalid I-DUNNO')
 
     addr = bits_to_bytes(bits)
 
@@ -160,7 +160,7 @@ def decode(i_dunno):
     elif len(addr) == 4:
         cls = ipaddress.IPv4Address
     else:
-        raise ValueError('invalid I-DUNNO notation')
+        raise ValueError('invalid I-DUNNO')
 
     try:
         return cls(addr)
