@@ -1,5 +1,5 @@
 """
-An RFC 8771-compliant implementation of the Internationalized Deliberately Unreadable Network Notation (shortened as I-DUNNO)
+An RFC8771-compliant implementation of the Internationalized Deliberately Unreadable Network Notation (shortened as I-DUNNO)
 """
 
 
@@ -112,7 +112,7 @@ def confusion_check(bytestr, level, levels, constraints):
     return satisfied >= confusion_level['required']
 
 
-def encode(addr, level='satisfactory'):
+def encode(addr, level='minimum'):
     """
     Encode an ipaddress.IPv6Address or an ipaddress.IPv4Address object into a random, valid I-DUNNO representation at the given confusion level.
     A ValueError is raised if valid I-DUNNO for the given arguments does not exist.
