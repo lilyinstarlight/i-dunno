@@ -108,6 +108,27 @@ def confusion_check(bytestr, level, levels, constraints):
     return satisfied >= confusion_level['required']
 
 
+def chunks(iterable, size):
+    """
+    Split an iterable into chunks.
+
+    Returns an iterator of iterators.  Each inner iterator yields
+    some items of the iterable provided, but stops after size items.
+    The remaining items can be accessed via the later inner iterators.
+
+    >>> [list(ch) for ch in chunks("ABCDEFG", 3)]
+    [['A', 'B', 'C'], ['D', 'E', 'F'], ['G']]
+    """
+    sourceiter = iter(iterable)
+    while True:
+        batchiter = itertools.islice(sourceiter, size)
+        try:
+            nxt = next(batchiter)
+        except StopIteration:
+            return
+        yield itertools.chain([nxt], batchiter)
+
+
 def encode(addr, level='minimum'):
     """
     Encode an ipaddress.IPv6Address or an ipaddress.IPv4Address object into a random, valid I-DUNNO representation at the given confusion level.
@@ -124,12 +145,15 @@ def encode(addr, level='minimum'):
         lambda bytestr: confusion_check(bytestr, level, confusion_levels, confusion_constraints),
         packed_combinations(tuple(bits), tuple(utf8_lengths))
     )
-    bytestrs = list(candidates)
 
-    if len(bytestrs) > 0:
-        return random.choice(bytestrs)
-    else:
-        raise ValueError(f'could not represent given address "{addr}" as valid I-DUNNO at confusion level "{level}"')
+    # Select candidates in limited-size groups, so we can handle addresses
+    # that allow very large numbers of encodings without poor performance.
+    for chunk in chunks(candidates, 10):
+        bytestrs = list(chunk)
+        if len(bytestrs) > 0:
+            return random.choice(bytestrs)
+
+    raise ValueError(f'could not represent given address "{addr}" as valid I-DUNNO at confusion level "{level}"')
 
 
 def decode(i_dunno):
