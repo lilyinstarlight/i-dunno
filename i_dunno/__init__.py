@@ -120,12 +120,15 @@ def encode(addr, level='minimum'):
 
     bits = bytes_to_bits(addr.packed)
 
-    bytestrs = list(packed_combinations(tuple(bits), tuple(utf8_lengths)))
+    candidates = filter(
+        lambda bytestr: confusion_check(bytestr, level, confusion_levels, confusion_constraints),
+        packed_combinations(tuple(bits), tuple(utf8_lengths))
+    )
+    bytestrs = list(candidates)
     random.shuffle(bytestrs)
 
     for bytestr in bytestrs:
-        if confusion_check(bytestr, level, confusion_levels, confusion_constraints):
-            return bytestr
+        return bytestr
 
     raise ValueError(f'could not represent given address "{addr}" as valid I-DUNNO at confusion level "{level}"')
 
