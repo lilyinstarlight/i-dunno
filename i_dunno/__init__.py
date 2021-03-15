@@ -65,12 +65,10 @@ def bits_to_bytes(bits):
     return bytes(sum(bit << (7 - idx) for idx, bit in enumerate(aligned_bits[sidx:sidx + 8])) for sidx in range(0, len(aligned_bits), 8))
 
 
-@functools.lru_cache
 def packed_combinations(bits, lengths):
     if not bits:
-        return [b'']
-
-    bytestrs = []
+        yield b''
+        return
 
     for minimum, length in lengths:
         if len(bits) < length:
@@ -90,11 +88,9 @@ def packed_combinations(bits, lengths):
             try:
                 bytestr = part + combination
                 bytestr.decode('utf-8')
-                bytestrs.append(bytestr)
+                yield(bytestr)
             except UnicodeDecodeError:
                 continue
-
-    return bytestrs
 
 
 def confusion_check(bytestr, level, levels, constraints):
@@ -124,7 +120,7 @@ def encode(addr, level='minimum'):
 
     bits = bytes_to_bits(addr.packed)
 
-    bytestrs = packed_combinations(tuple(bits), tuple(utf8_lengths))
+    bytestrs = list(packed_combinations(tuple(bits), tuple(utf8_lengths)))
     random.shuffle(bytestrs)
 
     for bytestr in bytestrs:
