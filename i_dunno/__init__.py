@@ -65,7 +65,7 @@ def bits_to_bytes(bits):
     return bytes(sum(bit << (7 - idx) for idx, bit in enumerate(aligned_bits[sidx:sidx + 8])) for sidx in range(0, len(aligned_bits), 8))
 
 
-@functools.lru_cache
+@functools.lru_cache()
 def packed_combinations(bits, lengths):
     if not bits:
         return [b'']
@@ -153,14 +153,17 @@ def decode(i_dunno):
         else:
             raise ValueError('invalid I-DUNNO')
 
-    addr = bits_to_bytes(bits)
-
-    if len(addr) == 16:
+    max_padding = max(utf8_lengths)[1] - 1
+    if 128 <= len(bits) <= 128 + max_padding:
+        bits = bits[:128]
         cls = ipaddress.IPv6Address
-    elif len(addr) == 4:
+    elif 32 <= len(bits) <= 32 + max_padding:
+        bits = bits[:32]
         cls = ipaddress.IPv4Address
     else:
         raise ValueError('invalid I-DUNNO')
+
+    addr = bits_to_bytes(bits)
 
     try:
         return cls(addr)
